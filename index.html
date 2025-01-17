@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz des Capitales du Monde</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question-container {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .incorrect {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .score {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz des Capitales du Monde</h1>
+        <div id="start-screen">
+            <p>Testez vos connaissances des capitales du monde!</p>
+            <button onclick="startQuiz()">Commencer le Quiz</button>
+        </div>
+        
+        <div id="quiz-screen" class="hidden">
+            <div class="score">Score: <span id="score">0</span>/<span id="total">0</span></div>
+            <div class="question-container">
+                <p>Quelle est la capitale de <span id="current-country"></span> ?</p>
+                <input type="text" id="answer-input" placeholder="Votre réponse">
+                <button onclick="checkAnswer()">Valider</button>
+            </div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div id="end-screen" class="hidden">
+            <h2>Quiz terminé!</h2>
+            <p>Score final: <span id="final-score"></span></p>
+            <p id="final-message"></p>
+            <button onclick="restartQuiz()">Recommencer</button>
+        </div>
+    </div>
+
+    <script>
+        const capitales = {
+            "France": "Paris",
+            "Allemagne": "Berlin",
+            "Espagne": "Madrid",
+            "Italie": "Rome",
+            "Royaume-Uni": "Londres",
+            "Portugal": "Lisbonne",
+            "Japon": "Tokyo",
+            "Chine": "Pékin",
+            "Inde": "New Delhi",
+            "Canada": "Ottawa",
+            "Brésil": "Brasília",
+            "Argentine": "Buenos Aires",
+            "Australie": "Canberra",
+            "Maroc": "Rabat",
+            "Égypte": "Le Caire"
+        };
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestions = Object.entries(capitales);
+            currentQuestions.sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            score = 0;
+            
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('total').textContent = currentQuestions.length;
+            document.getElementById('score').textContent = score;
+            
+            showNextQuestion();
+        }
+
+        function showNextQuestion() {
+            if (currentIndex < currentQuestions.length) {
+                document.getElementById('current-country').textContent = currentQuestions[currentIndex][0];
+                document.getElementById('answer-input').value = '';
+                document.getElementById('feedback').textContent = '';
+                document.getElementById('answer-input').focus();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
+            const correctAnswer = currentQuestions[currentIndex][1].toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            if (userAnswer === correctAnswer) {
+                score++;
+                document.getElementById('score').textContent = score;
+                feedback.textContent = "✓ Correct!";
+                feedback.className = "feedback correct";
+            } else {
+                feedback.textContent = `✗ Incorrect. La capitale de ${currentQuestions[currentIndex][0]} est ${currentQuestions[currentIndex][1]}.`;
+                feedback.className = "feedback incorrect";
+            }
+            
+            currentIndex++;
+            setTimeout(showNextQuestion, 1500);
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+            
+            const percentage = (score / currentQuestions.length) * 100;
+            document.getElementById('final-score').textContent = 
+                `${score}/${currentQuestions.length} (${percentage.toFixed(1)}%)`;
+            
+            let message = '';
+            if (percentage === 100) {
+                message = "Parfait! Vous êtes un expert en géographie!";
+            } else if (percentage >= 75) {
+                message = "Excellent travail!";
+            } else if (percentage >= 50) {
+                message = "Bon travail! Continuez à apprendre!";
+            } else {
+                message = "Continuez à pratiquer, vous vous améliorerez!";
+            }
+            document.getElementById('final-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        // Permettre la validation avec la touche Entrée
+        document.getElementById('answer-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
