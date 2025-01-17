@@ -84,3 +84,44 @@ button:hover {
 .hidden {
     display: none;
 }
+/* Mobile styles */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px;
+        padding: 10px;
+    }
+    #quiz-screen, #start-screen, #end-screen {
+        width: 100%;
+        padding: 10px;
+    }
+    #current-country {
+        font-size: 24px;
+    }
+    #answer-input {
+        width: 100%;
+    }
+    .feedback {
+        font-size: 18px;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 601px) and (max-width: 900px) {
+    body {
+        font-size: 18px;
+        padding: 20px;
+    }
+    #quiz-screen, #start-screen, #end-screen {
+        width: 80%;
+        margin: auto;
+    }
+    #current-country {
+        font-size: 28px;
+    }
+    #answer-input {
+        width: 80%;
+    }
+    .feedback {
+        font-size: 20px;
+    }
+}
