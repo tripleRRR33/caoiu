@@ -205,13 +205,13 @@ function startQuiz() {
     currentQuestions.sort(() => Math.random() - 0.5);
     currentIndex = 0;
     score = 0;
-    
+
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('quiz-screen').classList.remove('hidden');
     document.getElementById('end-screen').classList.add('hidden');
     document.getElementById('total').textContent = currentQuestions.length;
     document.getElementById('score').textContent = score;
-    
+
     showNextQuestion();
 }
 
@@ -230,7 +230,7 @@ function checkAnswer() {
     const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
     const correctAnswer = currentQuestions[currentIndex][1].toLowerCase();
     const feedback = document.getElementById('feedback');
-    
+
     if (userAnswer === correctAnswer) {
         score++;
         document.getElementById('score').textContent = score;
@@ -240,7 +240,7 @@ function checkAnswer() {
         feedback.textContent = `✗ Incorrect. La capitale de ${currentQuestions[currentIndex][0]} est ${currentQuestions[currentIndex][1]}.`;
         feedback.className = "feedback incorrect";
     }
-    
+
     currentIndex++;
     setTimeout(showNextQuestion, 1500);
 }
@@ -248,11 +248,11 @@ function checkAnswer() {
 function endQuiz() {
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('end-screen').classList.remove('hidden');
-    
+
     const percentage = (score / currentQuestions.length) * 100;
-    document.getElementById('final-score').textContent = 
+    document.getElementById('final-score').textContent =
         `${score}/${currentQuestions.length} (${percentage.toFixed(1)}%)`;
-    
+
     let message = '';
     if (percentage === 100) {
         message = "Parfait! Vous êtes un expert en géographie!";
